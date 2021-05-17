@@ -1,0 +1,194 @@
+<!-- a simple html page to practice using react directly in an html -->
+<!--
+helpful references for this project:
+  https://upmostly.com/tutorials/react-onhover-event-handling-with-examples
+  https://www.geeksforgeeks.org/how-to-change-the-position-of-the-element-dynamically-in-reactjs/
+  https://stackoverflow.com/questions/49350217/react-how-do-you-call-a-function-from-inside-another-function
+  https://www.jsdiaries.com/how-to-get-the-width-of-the-window-in-react-js/
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+    <h1>Scared Button</h1>
+
+    <p> The scared button is scared of being clicked. Every time you hover over
+      the button or click it, it will run away a little further in a random direction</p>
+
+    <p> The scared button occasionally becomes too scared to move and will just say SCARED </p>
+
+    <p> The scared button cannot leave the visible window, but it can dissappear if the window is too small on loading this page. </p>
+
+
+    <div id="scared"></div><!-- this div is used by the React component -->
+
+    <!-- React script -->
+    <script type="text/babel">
+
+      //responses that the button can display on hovering over it with the mouse
+      const arr = ['No', 'stop', 'run away', 'save me', 'help me'];
+
+      class ScaredButton extends React.Component {
+
+        constructor(){
+          super()
+          this.show = this.show.bind(this);
+          this.plusminus = this.plusminus.bind(this);
+        }
+
+        state = {
+          x: window.innerWidth - window.innerWidth/2,
+          y: window.innerHeight - window.innerHeight/2,
+          amount: 30,
+          minWidth: 0,
+          minHeight: 0,
+          maxWidth: window.innerWidth - 200,
+          maxHeight: window.innerHeight - 200,
+        };
+
+
+        hide() {
+          //show a random response and change the styling
+          let num  = Math.floor(Math.random() * arr.length);
+          let response = arr[num];
+          event.target.innerHTML = response;
+          event.target.style.color = 'white';
+          event.target.style.backgroundColor = '#1773c2';
+        };
+
+        click() {
+          //the button is sad that it has been clicked and changes to reflect this
+          event.target.innerHTML = "Why?"
+          event.target.style.color = 'black';
+          event.target.style.backgroundColor = 'white';
+        }
+
+        show = () => {
+          //the button returns to default and moves in a random direction according to the amount
+          event.target.innerHTML = 'Click Me';
+          event.target.style.color = '#1773c2';
+          event.target.style.backgroundColor = 'white';
+
+          //button runs away in a random direction
+          let direction = Math.floor(Math.random() * 8);
+
+          //0 subtracts, 1 adds, 2 does nothing
+          //this switch function chooses one of eight directions the button can move in and passes the information to plusminus()
+          switch (direction) {
+            case 0:
+              this.plusminus(2,0);
+              break;
+            case 1:
+              this.plusminus(1,0);
+              break;
+            case 2:
+              this.plusminus(1,2);
+              break;
+            case 3:
+              this.plusminus(1,1);
+              break;
+            case 4:
+              this.plusminus(2,1);
+              break;
+            case 5:
+              this.plusminus(0,1);
+              break;
+            case 6:
+              this.plusminus(0,2);
+              break;
+            case 7:
+              this.plusminus(0,0);
+              break;
+            default:
+              break;
+          }
+
+        };
+
+        plusminus = (a,b) =>{
+
+          let amount = this.state.amount;
+          let newX = this.state.x;
+          let newY = this.state.y;
+
+          if(a === 1){
+            newX += amount;
+          }
+          else if(a === 0){
+            newX -= amount;
+          }
+
+          if(b === 1){
+            newY += amount;
+          }
+          else if (b === 0){
+            newY -= amount;
+          }
+
+
+          //keep within the boundaries
+          if(newX < this.state.minWidth){
+            newX = this.state.minWidth;
+          }
+
+          if(newY < this.state.minHeight){
+            newY = this.state.minHeight;
+          }
+
+          if(newX > this.state.maxWidth-105){
+            newX = this.state.maxWidth-105;
+          }
+
+          if(newY > this.state.maxHeight-55){
+            newY = this.state.maxHeight-55;
+          }
+
+          //if there is no change
+          if (newX === this.state.x && newY === this.state.y) {
+            event.target.innerHTML = "SCARED"
+            event.target.style.color = 'white';
+            event.target.style.backgroundColor = 'black';
+          }
+          else {
+            //if there has been a change then move back to default colours
+            event.target.innerHTML = 'Click Me';
+            event.target.style.color = '#1773c2';
+            event.target.style.backgroundColor = 'white';
+          }
+          //amount slowly increases with each call,
+          //and it redefines the boundaries incase the window size has been adjusted.
+          this.setState({
+            x: newX,
+            y: newY,
+            amount: amount * 1.2,
+            maxWidth: window.innerWidth,
+            maxHeight: window.innerHeight,
+          });
+        }
+
+        render() {
+          return <button
+            onMouseOver={this.hide}
+            onMouseOut={this.show}
+            onClick={this.click}
+            style={{
+              position: "absolute",
+              left: `${this.state.x}px`,
+              top: `${this.state.y}px`,
+            }}
+          >Click Me</button>
+        }
+      }
+
+      ReactDOM.render(<ScaredButton />, document.getElementById('scared'))
+    </script>
+
+  </body>
+</html>

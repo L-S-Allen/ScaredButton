@@ -1,0 +1,45 @@
+/*
+color gradient generated at: https://mycolor.space/gradient3?ori=to+left+bottom&hex=%23E0F6FF&hex2=%23E0FBFF&hex3=%23203C54&submit=submit
+*/
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Libre+Baskerville&family=Farro:wght@300&display=swap');
+
+body {
+  background-image: linear-gradient(to left bottom, #e0f6ff, #e0f7ff, #e0f8ff, #e0f9ff, #e0faff, #cee9ef, #bcd8e0, #aac8d1, #84a3b0, #607f91, #3f5d72, #203c54);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/*button styling is also adjusted in the react component*/
+button {
+  color: #1773c2;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid grey;
+  padding: 5px;
+  width: 100px;
+  height: 50px;
+  box-shadow: 0px 5px 2px grey;
+  font-family: Farro;
+}
+
+button:hover {
+  color: white;
+  background-color: #1773c2;
+  font-weight: bold;
+}
+
+/* Descriptive text styling */
+h1 {
+  margin: 50px;
+  font-size: 100px;
+  font-family: Anton;
+}
+
+p {
+  margin: 50px;
+  font-size: 20px;
+  font-family: Libre Baskerville;
+}
